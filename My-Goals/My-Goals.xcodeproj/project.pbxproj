@@ -14,6 +14,7 @@
 		01DCDD1D27F374A100E52EE7 /* My_Goals.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01DCDD1B27F374A100E52EE7 /* My_Goals.xcdatamodeld */; };
 		01DCDD1F27F374A200E52EE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01DCDD1E27F374A200E52EE7 /* Assets.xcassets */; };
 		01DCDD2227F374A200E52EE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01DCDD2027F374A200E52EE7 /* LaunchScreen.storyboard */; };
+		01DCDD2A27F375C800E52EE7 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCDD2927F375C800E52EE7 /* DetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		01DCDD1E27F374A200E52EE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01DCDD2127F374A200E52EE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01DCDD2327F374A200E52EE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01DCDD2927F375C800E52EE7 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				01DCDD1227F374A100E52EE7 /* AppDelegate.swift */,
 				01DCDD1427F374A100E52EE7 /* SceneDelegate.swift */,
 				01DCDD1627F374A100E52EE7 /* ViewController.swift */,
+				01DCDD2927F375C800E52EE7 /* DetailsViewController.swift */,
 				01DCDD1827F374A100E52EE7 /* Main.storyboard */,
 				01DCDD1E27F374A200E52EE7 /* Assets.xcassets */,
 				01DCDD2027F374A200E52EE7 /* LaunchScreen.storyboard */,
@@ -145,6 +148,7 @@
 				01DCDD1727F374A100E52EE7 /* ViewController.swift in Sources */,
 				01DCDD1327F374A100E52EE7 /* AppDelegate.swift in Sources */,
 				01DCDD1527F374A100E52EE7 /* SceneDelegate.swift in Sources */,
+				01DCDD2A27F375C800E52EE7 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
