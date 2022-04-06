@@ -16,6 +16,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var selectedName = ""
     var selectedUUID : UUID?
+    var selectedPriority : Bool?
 
     @IBOutlet var tableView: UITableView!
     
@@ -26,6 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         tableView.delegate = self
         tableView.dataSource = self
+        
         
         loadData()
     }
@@ -79,9 +81,96 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return goalArray.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = goalArray[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! GoalsTableViewCell
+        
+        cell.titleLabel.text = goalArray[indexPath.row]
+        if priorityArray[indexPath.row] == true {
+            cell.cellimageview.isHidden = false
+            cell.titleLabel.textColor = .red
+            
+            
+        } else {
+            cell.cellimageview.isHidden = true
+            cell.titleLabel.textColor = .black
+        }
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedName = goalArray[indexPath.row]
+        selectedUUID = idArray[indexPath.row]
+        selectedPriority = priorityArray[indexPath.row]
+        
+        performSegue(withIdentifier: "toDetailsVC", sender: nil)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toDetailsVC" {
+            let destination = segue.destination as! DetailsViewController
+            destination.selectedItemName = selectedName
+            destination.selectedUUID = selectedUUID
+            destination.selectedPriority = selectedPriority ?? false
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            let uuidString = idArray[indexPath.row].uuidString
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Goals")
+            fetchRequest.predicate = NSPredicate(format: "id = %@", uuidString)
+            fetchRequest.returnsObjectsAsFaults = false
+            
+            do {
+                let results = try context.fetch(fetchRequest)
+                
+                if results.count > 0 {
+                    for result in results as! [NSManagedObject]{
+                        if let id = result.value(forKey: "id") as? UUID {
+                            if id == idArray[indexPath.row] {
+                                context.delete(result)
+                                
+                                goalArray.remove(at: indexPath.row)
+                                idArray.remove(at: indexPath.row)
+                                priorityArray.remove(at: indexPath.row)
+                                
+                                
+                                self.tableView.reloadData()
+                                
+                                do {
+                                    try context.save()
+                                }catch {
+                                    
+                                }
+                                
+                                break
+                            }
+                        }
+                    }
+                }
+                
+            }catch {
+                
+            }
+            
+        }
+    }
+    //Using for clearing Coredata database
+    func deleteAll() {
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+           let context = delegate.persistentContainer.viewContext
+
+           let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Goals")
+           let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+
+           do {
+               try context.execute(deleteRequest)
+               try context.save()
+           } catch {
+               print ("There was an error")
+           }
     }
 }
 

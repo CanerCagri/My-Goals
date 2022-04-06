@@ -43,6 +43,7 @@ class DetailsViewController: UIViewController {
         goals.setValue(goalTextField.text!, forKey: "goal")
         goals.setValue(explainTextView.text!, forKey: "goalDescription")
         goals.setValue(selectedPriority, forKey: "priority")
+        goals.setValue(UUID(), forKey: "id")
         
         do {
             try context.save()
