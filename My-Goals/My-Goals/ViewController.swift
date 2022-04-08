@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var goalArray : [String] = []
@@ -15,8 +16,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var priorityArray : [Bool] = []
     
     var selectedName = ""
+    var selectedDesc = ""
     var selectedUUID : UUID?
-    var selectedPriority : Bool?
+    var selectedPriority : Bool? = false
 
     @IBOutlet var tableView: UITableView!
     
@@ -27,13 +29,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         tableView.delegate = self
         tableView.dataSource = self
-        
-        
+      
         loadData()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(loadData), name: NSNotification.Name(rawValue: "dataEntered") , object: nil)
     }
+    
     @objc func loadData() {
         goalArray.removeAll(keepingCapacity: false)
         idArray.removeAll(keepingCapacity: false)
@@ -66,12 +69,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
                 tableView.reloadData()
             }
-            
-            
         } catch {
             print("Get error when loading data")
         }
     }
+    
     @objc func rightBarButtonTapped() {
         selectedName = ""
         performSegue(withIdentifier: "toDetailsVC", sender: self)
@@ -80,6 +82,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return goalArray.count
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! GoalsTableViewCell
         
@@ -87,32 +90,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if priorityArray[indexPath.row] == true {
             cell.cellimageview.isHidden = false
             cell.titleLabel.textColor = .red
-            
-            
         } else {
             cell.cellimageview.isHidden = true
             cell.titleLabel.textColor = .black
         }
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedName = goalArray[indexPath.row]
+        selectedDesc = descriptionArray[indexPath.row]
         selectedUUID = idArray[indexPath.row]
         selectedPriority = priorityArray[indexPath.row]
         
         performSegue(withIdentifier: "toDetailsVC", sender: nil)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetailsVC" {
             let destination = segue.destination as! DetailsViewController
             destination.selectedItemName = selectedName
+            destination.selectedDescription = selectedDesc
             destination.selectedUUID = selectedUUID
             destination.selectedPriority = selectedPriority ?? false
         }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         if editingStyle == .delete {
             let uuidString = idArray[indexPath.row].uuidString
             
@@ -133,30 +137,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                 context.delete(result)
                                 
                                 goalArray.remove(at: indexPath.row)
+                                descriptionArray.remove(at: indexPath.row)
                                 idArray.remove(at: indexPath.row)
                                 priorityArray.remove(at: indexPath.row)
-                                
-                                
                                 self.tableView.reloadData()
                                 
                                 do {
                                     try context.save()
                                 }catch {
-                                    
+                                    print(error.localizedDescription)
                                 }
-                                
                                 break
                             }
                         }
                     }
                 }
-                
             }catch {
-                
+                print(error.localizedDescription)
             }
-            
         }
     }
+    /*
     //Using for clearing Coredata database
     func deleteAll() {
         let delegate = UIApplication.shared.delegate as! AppDelegate
@@ -171,6 +172,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
            } catch {
                print ("There was an error")
            }
-    }
+    }   */
+    
 }
 

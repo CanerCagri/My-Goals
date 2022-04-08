@@ -10,10 +10,12 @@ import CoreData
 
 class DetailsViewController: UIViewController {
 
+    @IBOutlet var `switch`: UISwitch!
     @IBOutlet var goalTextField: UITextField!
     @IBOutlet var explainTextView: UITextView!
     
     var selectedItemName = ""
+    var selectedDescription = ""
     var selectedUUID : UUID?
     var selectedPriority = false
     
@@ -22,18 +24,31 @@ class DetailsViewController: UIViewController {
         
         explainTextView.delegate = self
         explainTextView.textColor = UIColor.darkGray
+        
+        if selectedItemName == "" {
+            goalTextField.text = ""
+            explainTextView.text = ""
+            selectedPriority = false
+        } else {
+            goalTextField.text = selectedItemName
+            explainTextView.text = selectedDescription
+            `switch`.isOn = selectedPriority
+        }
+       
     }
     override func viewDidAppear(_ animated: Bool) {
         
     }
+   
     @IBAction func `switch`(_ sender: UISwitch) {
-        
         if sender.isOn == true {
             selectedPriority = true
         } else {
             selectedPriority = false
         }
     }
+    
+   
     
     @IBAction func saveBtnTapped(_ sender: Any) {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
