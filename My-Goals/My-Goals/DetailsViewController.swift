@@ -9,10 +9,12 @@ import UIKit
 import CoreData
 
 class DetailsViewController: UIViewController {
-
+    
     @IBOutlet var `switch`: UISwitch!
+    @IBOutlet var imageView: UIImageView!
     @IBOutlet var goalTextField: UITextField!
     @IBOutlet var explainTextView: UITextView!
+    @IBOutlet var saveButton: UIButton!
     
     var selectedItemName = ""
     var selectedDescription = ""
@@ -23,23 +25,29 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
         
         explainTextView.delegate = self
+        
+        
         explainTextView.textColor = UIColor.darkGray
         
         if selectedItemName == "" {
             goalTextField.text = ""
-            explainTextView.text = ""
             selectedPriority = false
+            saveButton.isEnabled = true
+            `switch`.isEnabled = true
+            goalTextField.isEnabled = true
+            explainTextView.isEditable = true
+            
         } else {
             goalTextField.text = selectedItemName
             explainTextView.text = selectedDescription
             `switch`.isOn = selectedPriority
+            `switch`.isEnabled = false
+            saveButton.isEnabled = false
+            goalTextField.isEnabled = false
+            explainTextView.isEditable = false
         }
-       
     }
-    override func viewDidAppear(_ animated: Bool) {
-        
-    }
-   
+    
     @IBAction func `switch`(_ sender: UISwitch) {
         if sender.isOn == true {
             selectedPriority = true
@@ -47,8 +55,6 @@ class DetailsViewController: UIViewController {
             selectedPriority = false
         }
     }
-    
-   
     
     @IBAction func saveBtnTapped(_ sender: Any) {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -73,21 +79,21 @@ class DetailsViewController: UIViewController {
 
 extension DetailsViewController : UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if (explainTextView.text == "For Success Your Goal")
-            {
-                explainTextView.text = nil
-                explainTextView.textColor = UIColor.darkGray
-            }
+        if explainTextView.text == "What needs to be done to achieve your goal"
+        {
+            explainTextView.text = nil
+            explainTextView.textColor = UIColor.darkGray
+        }
         textView.becomeFirstResponder()
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if explainTextView.text.isEmpty
-            {
-                explainTextView.text = "For Success Your Goal"
-                explainTextView.textColor = UIColor.darkGray
-            }
+        {
+            explainTextView.text = "What needs to be done to achieve your goal"
+            explainTextView.textColor = UIColor.darkGray
+        }
         textView.resignFirstResponder()
     }
-  
+    
 }
