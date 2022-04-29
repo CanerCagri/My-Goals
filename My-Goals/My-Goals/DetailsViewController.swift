@@ -25,8 +25,7 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
         
         explainTextView.delegate = self
-        
-        
+        title = "My Goals"
         explainTextView.textColor = UIColor.darkGray
         
         if selectedItemName == "" {
