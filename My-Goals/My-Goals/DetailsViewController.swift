@@ -54,6 +54,9 @@ class DetailsViewController: UIViewController {
             selectedPriority = false
         }
     }
+    @IBAction func cancelBtnTapped(_ sender: Any) {
+        dismiss(animated: true)
+    }
     
     @IBAction func saveBtnTapped(_ sender: Any) {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -67,9 +70,9 @@ class DetailsViewController: UIViewController {
         
         do {
             try context.save()
-            print("Save completed!")
+            dismiss(animated: true)
         }catch {
-            print("Error , didnt save!")
+            fatalError("Error when saving data.")
         }
         NotificationCenter.default.post(name: NSNotification.Name("dataEntered"), object: nil)
         self.navigationController?.popViewController(animated: true)

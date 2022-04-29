@@ -111,11 +111,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! GoalsTableViewCell
         
-        var goalArrayItems = goalArray[indexPath.row]
+        var goalArrayItems = String ()
         if searchController.isActive {
             goalArrayItems = filteredGoals[indexPath.row]
-        } else if searchController.searchBar.text == nil {
-            goalArrayItems = goalArray[indexPath.row]
         } else {
             goalArrayItems = goalArray[indexPath.row]
         }
@@ -137,6 +135,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         } else {
             selectedName = goalArray[indexPath.row]
         }
+        selectedDesc = descriptionArray[indexPath.row]
+        selectedUUID = idArray[indexPath.row]
+        selectedPriority = priorityArray[indexPath.row]
+        
+        
         performSegue(withIdentifier: "toDetailsVC", sender: nil)
     }
     
@@ -153,6 +156,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let uuidString = idArray[indexPath.row].uuidString
+            
             
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context = appDelegate.persistentContainer.viewContext
