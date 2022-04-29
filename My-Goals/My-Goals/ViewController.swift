@@ -25,7 +25,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let searchController = UISearchController()
     @IBOutlet var tableView: UITableView!
     
-    @IBOutlet var `switch`: UISwitch!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,49 +93,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         } catch {
             print("Get error when loading data")
-        }
-    }
-    
-    @IBAction func `switch`(_ sender: UISwitch) {
-        if sender.isOn == true {
-            goalArray.removeAll(keepingCapacity: false)
-            idArray.removeAll(keepingCapacity: false)
-            priorityArray.removeAll(keepingCapacity: false)
-            descriptionArray.removeAll(keepingCapacity: false)
-            
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let context = appDelegate.persistentContainer.viewContext
-            
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Goals")
-            fetchRequest.predicate = NSPredicate(format: "priority == true")
-            
-            fetchRequest.returnsObjectsAsFaults = false
-            
-            do {
-                let results = try context.fetch(fetchRequest)
-                
-                if results.count > 0 {
-                    for result in results as! [NSManagedObject] {
-                        if let goal = result.value(forKey: "goal") as? String {
-                            goalArray.append(goal)
-                        }
-                        if let id = result.value(forKey: "id") as? UUID {
-                            idArray.append(id)
-                        }
-                        if let description = result.value(forKey: "goalDescription") as? String {
-                            descriptionArray.append(description)
-                        }
-                        if let priority = result.value(forKey: "priority") as? Bool {
-                            priorityArray.append(priority)
-                        }
-                    }
-                    tableView.reloadData()
-                }
-            } catch {
-                print("Get error when loading data")
-            }
-        } else {
-            loadData()
         }
     }
     
